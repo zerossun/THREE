@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <canvas id="canvas" width="300" height="300"></canvas>
+  <script type="importmap">
+  {
+    "imports": {
+       "three": "https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.module.js",
+      "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.150.0/examples/jsm/"
+    }
+  }
+</script>
+<script type="module">
+// module은 하나의 파일.
+
+/**
+3D model 브라우저에서 보여주는 법
+1. 장면 만들고
+2. 브라우저에서 렌더링
+*/
+
+
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import * as THREE from 'three';
+
+// 장면 생성 코드
+let scene = new THREE.Scene();
+// 렌더링 시키는 코드(설정)
+let renderer = new THREE.WebGLRenderer({
+  canvas : document.querySelector('#canvas'),
+  antialias : true,
+});
+//GLTF 파일은 색상 인코딩 방식을 아래처럼 바뀌어야 브라우저에서 실 다운로드 이미지처럼 나옴
+renderer.outputEncoding = THREE.sRGBEncoding;
+
+
+
+/**
+ 3d model 보여줄 때 필요한 것들
+ 1. 카메라 2. 조명 3. 배경
+*/
+
+/** 카메라 세팅
+
+PerspectiveCamera:원근법 적용
+OrthographicCamera: 원근법 적용 x
+*/
+// 카메라 생성 코드
+let camera = new THREE.PerspectiveCamera(30,1);
+// camera위치조정
+camera.position.set(0,0,5);
+
+scene.background = new THREE.Color('white');
+let light = new THREE.DirectionalLight(0xfff00,10);
+scene.add(light);
+/**
+조명 종류
+- AmbientLight
+- pointLight
+- DirectionalLight
+
+*/
+
+
+
+//  콜백함수(function()내부)를 넣어loading이 끝났을 때 특정 기능을 넣을 수 있음
+let loader = new GLTFLoader();
+loader.load('shiba/scene.gltf', function(gltf){
+scene.add(gltf.scene);
+
+function animate() {
+  requestAnimationFrame(animate)
+  gltf.scene.rotation.y +=0.05;
+  renderer.render(scene,camera);
+}
+animate()
+});
+
+</script>
+</body>
+
+</html>
