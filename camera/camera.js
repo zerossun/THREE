@@ -61,6 +61,9 @@ function onWindowResize() {
   // 카메라에 있는 어떠한 파라미터라도 변경된다면 이게 필요하다
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
+
+vv;
+
 window.addEventListener('resize', onWindowResize);
 
 const animate = function animate(time) {
